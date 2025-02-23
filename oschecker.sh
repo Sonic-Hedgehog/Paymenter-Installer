@@ -111,6 +111,7 @@ if [ -n "$MATCHED_SCRIPT" ]; then
     fi
 
     bash -c "$INSTALL_SCRIPT"
+    echo "test"
 
 else
     log_error_report "No installation script found for $OS_NAME $OS_VERSION." "Script Find" "Find matching script"
