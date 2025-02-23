@@ -22,8 +22,8 @@ log_error_report() {
     # Gather system information
     gather_system_info
 
-    echo -e "${RED}[ERROR]${NC} $error_message"
-    echo -e "${YELLOW}[SYSTEM INFORMATION]${NC}"
+    echo -e "${RED}[ERROR]${RESET} $error_message"
+    echo -e "${YELLOW}[SYSTEM INFORMATION]${RESET}"
     echo "  Operating System: $OS_NAME"
     echo "  Version: $OS_VERSION"
     echo "  Architecture: $ARCHITECTURE"
@@ -31,5 +31,5 @@ log_error_report() {
     echo "  Check: $error_context"
     echo "  Action: $error_action"
     
-    echo -e "${BLUE}[INFO]${NC} Please report this issue on GitHub or Discord and provide the log above."
+    echo -e "${YELLOW}[Support Required]${RESET} Please report this issue on GitHub or Discord and provide the log above."
 }

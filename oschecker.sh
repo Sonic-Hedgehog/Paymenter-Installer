@@ -55,7 +55,7 @@ source <(curl -fsSL "$REPO_URL/error-reporter.sh")
 OS_LIST=$(curl -fsSL "$REPO_URL/supported_os_list.json")
 
 if [ -z "$OS_LIST" ]; then
-    log_error_report "Failed to download the supported OS list." "UNKNOWN" "UNKNOWN" "UNKNOWN" "UNKNOWN" "System Check" "Download OS list"
+    log_error_report "Failed to download the supported OS list." "System Check" "Download OS list"
     exit 1
 fi
 
@@ -91,7 +91,7 @@ done <<< "$(echo "$OS_LIST" | jq -c '.[]')"
 
 # Falls nicht unterstützt, Fehlerbericht ausgeben
 if [ "$SUPPORTED" == "false" ]; then
-    log_error_report "Your system ($OS_NAME $OS_VERSION) is not supported." "$OS_NAME" "$OS_VERSION" "$ARCHITECTURE" "$KERNEL_VERSION" "System Check" "Check system compatibility"
+    log_error_report "Your system ($OS_NAME $OS_VERSION) is not supported." "System Check" "Check system compatibility"
     exit 1
 else
     log_success "The system is compatible! Running the installation script..."
@@ -113,6 +113,6 @@ if [ -n "$MATCHED_SCRIPT" ]; then
     bash -c "$INSTALL_SCRIPT"
 
 else
-    log_error_report "No installation script found for $OS_NAME $OS_VERSION." "$OS_NAME" "$OS_VERSION" "$ARCHITECTURE" "$KERNEL_VERSION" "Script Find" "Find matching script"
+    log_error_report "No installation script found for $OS_NAME $OS_VERSION." "Script Find" "Find matching script"
     exit 1
 fi
