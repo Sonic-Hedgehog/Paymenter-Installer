@@ -1,22 +1,7 @@
 [
     {
         "os": "Ubuntu",
-        "version": "20.04",
-        "script": "ubuntu_20_install.sh"
-    },
-    {
-        "os": "Ubuntu",
-        "version": "18.04",
-        "script": "ubuntu_18_install.sh"
-    },
-    {
-        "os": "Debian",
-        "version": "10",
-        "script": "debian_10_install.sh"
-    },
-    {
-        "os": "Ubuntu",
         "version": "22.04",
-        "script": "install-ubuntu-22.04.sh"
+        "script": "ubuntu_generic.sh"
     }
 ]
