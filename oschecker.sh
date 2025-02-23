@@ -65,33 +65,27 @@ OS_VERSION=$(lsb_release -sr)
 ARCHITECTURE=$(uname -m)
 KERNEL_VERSION=$(uname -r)
 
-# Gather system information
-OS_NAME=$(lsb_release -si 2>/dev/null || grep '^ID=' /etc/os-release | cut -d= -f2 | tr -d '"')
-OS_VERSION=$(lsb_release -sr 2>/dev/null || grep '^VERSION_ID=' /etc/os-release | cut -d= -f2 | tr -d '"')
-ARCHITECTURE=$(uname -m)
-KERNEL_VERSION=$(uname -r)
+# Zeige Systeminformationen an
+log_info "Operating System: $OS_NAME"
+log_info "Version: $OS_VERSION"
+log_info "Architecture: $ARCHITECTURE"
+log_info "Kernel Version: $KERNEL_VERSION"
 
-echo -e "${BLUE}[INFO]${NC} Operating System: ${OS_NAME}"
-echo -e "${BLUE}[INFO]${NC} Version: ${OS_VERSION}"
-echo -e "${BLUE}[INFO]${NC} Architecture: ${ARCHITECTURE}"
-echo -e "${BLUE}[INFO]${NC} Kernel Version: ${KERNEL_VERSION}"
-
-# Parse JSON with jq
+# Systemkompatibilität überprüfen
 SUPPORTED=false
-SCRIPT_TO_RUN=""
+MATCHED_SCRIPT=""
 
-while IFS= read -r line; do
-    os_name=$(echo "$line" | jq -r '.os')
-    os_version=$(echo "$line" | jq -r '.version')
-    arch=$(echo "$line" | jq -r '.architecture')
-    script_name=$(echo "$line" | jq -r '.script')
-
-    if [[ "$os_name" == "$OS_NAME" && "$os_version" == "$OS_VERSION" && "$arch" == "$ARCHITECTURE" ]]; then
-        SUPPORTED=true
-        SCRIPT_TO_RUN="$script_name"
-        break
+# Prüfe auf kompatible Systeme aus der JSON-Liste
+while read -r line; do
+    echo "$line"
+    if echo "$line" | grep -q "\"os\": \"$OS_NAME\""; then
+        if echo "$line" | grep -q "\"version\": \"$OS_VERSION\""; then
+            SUPPORTED=true
+            MATCHED_SCRIPT=$(echo "$line" | grep -oP '"script": "\K([^"]+)')
+            break
+        fi
     fi
-done <<< "$(echo "$OS_LIST" | jq -c '.[]')"
+done <<< "$OS_LIST"
 
 # Falls nicht unterstützt, Fehlerbericht ausgeben
 if [ "$SUPPORTED" == "false" ]; then
