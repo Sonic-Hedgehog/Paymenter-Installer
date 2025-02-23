@@ -85,6 +85,10 @@ while IFS= read -r line; do
     echo "$os_name"
     echo "$os_version"
 
+    echo "$OS_NAME"
+    echo "$OS_VERSION"
+
+
     if [[ "$os_name" == "$OS_NAME" && "$os_version" == "$OS_VERSION" ]]; then
         SUPPORTED=true
         MATCHED_SCRIPT="$script_name"
