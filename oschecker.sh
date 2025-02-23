@@ -82,6 +82,9 @@ while IFS= read -r line; do
     arch=$(echo "$line" | jq -r '.architecture')
     script_name=$(echo "$line" | jq -r '.script')
 
+    echo "$os_name"
+    echo "$os_version"
+
     if [[ "$os_name" == "$OS_NAME" && "$os_version" == "$OS_VERSION" ]]; then
         SUPPORTED=true
         MATCHED_SCRIPT="$script_name"
