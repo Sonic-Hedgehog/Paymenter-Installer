@@ -1,23 +1,35 @@
 #!/bin/bash
 
-# Funktion zum Erstellen eines Fehlerberichts
+# Load color generator if not already loaded
+if [ -z "$BLUE" ]; then
+    eval "$(curl -fsSL "https://raw.githubusercontent.com/Sonic-Hedgehog/paymenter-installer/main/utils/color-generator.sh")"
+fi
+
+# Function to gather system information
+gather_system_info() {
+    OS_NAME=$(lsb_release -si 2>/dev/null || grep '^ID=' /etc/os-release | cut -d= -f2 | tr -d '"')
+    OS_VERSION=$(lsb_release -sr 2>/dev/null || grep '^VERSION_ID=' /etc/os-release | cut -d= -f2 | tr -d '"')
+    ARCHITECTURE=$(uname -m)
+    KERNEL_VERSION=$(uname -r)
+}
+
+# Function to report an error
 log_error_report() {
-    local message="$1"
-    local os_name="$2"
-    local os_version="$3"
-    local architecture="$4"
-    local kernel_version="$5"
-    local check_type="$6"
-    local action="$7"
+    local error_message="$1"
+    local error_context="$2"
+    local error_action="$3"
 
-    echo -e "${RED}[ERROR REPORT]${RESET} $message"
-    echo "System Information:"
-    echo "  OS: $os_name $os_version"
-    echo "  Architecture: $architecture"
-    echo "  Kernel: $kernel_version"
-    echo "  Check: $check_type"
-    echo "  Action: $action"
-    echo "Please report this issue to the developer on GitHub or Discord, and provide the log above."
+    # Gather system information
+    gather_system_info
 
-    # Optional: Hier kannst du den Fehlerbericht auch an ein API oder eine Log-Datei senden.
+    echo -e "${RED}[ERROR]${NC} $error_message"
+    echo -e "${YELLOW}[SYSTEM INFORMATION]${NC}"
+    echo "  Operating System: $OS_NAME"
+    echo "  Version: $OS_VERSION"
+    echo "  Architecture: $ARCHITECTURE"
+    echo "  Kernel: $KERNEL_VERSION"
+    echo "  Check: $error_context"
+    echo "  Action: $error_action"
+    
+    echo -e "${BLUE}[INFO]${NC} Please report this issue on GitHub or Discord and provide the log above."
 }
