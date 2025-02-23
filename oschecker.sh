@@ -101,9 +101,17 @@ fi
 if [ -n "$MATCHED_SCRIPT" ]; then
     SCRIPT_URL="$REPO_URL/install_scripts/$MATCHED_SCRIPT"
     echo -e "\e[34m[INFO]\e[0m Running installation script from: $SCRIPT_URL"
-    
-    # Direkt ausführen (ohne Zwischenspeicherung)
-    bash <(curl -fsSL "$SCRIPT_URL")
+
+    INSTALL_SCRIPT=$(curl -fsSL "$SCRIPT_URL")
+
+    # If the installation script could not be downloaded
+    if [ -z "$INSTALL_SCRIPT" ]; then
+        report_error "Failed to download the installation script: ${SCRIPT_TO_RUN}" "System Check" "Downloading installation script"
+        exit 1
+    fi
+
+    bash -c "$INSTALL_SCRIPT"
+
 else
     log_error_report "No installation script found for $OS_NAME $OS_VERSION." "$OS_NAME" "$OS_VERSION" "$ARCHITECTURE" "$KERNEL_VERSION" "Script Find" "Find matching script"
     exit 1
