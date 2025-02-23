@@ -106,7 +106,7 @@ if [ -n "$MATCHED_SCRIPT" ]; then
 
     # If the installation script could not be downloaded
     if [ -z "$INSTALL_SCRIPT" ]; then
-        report_error "Failed to download the installation script: ${SCRIPT_TO_RUN}" "System Check" "Downloading installation script"
+        log_error_report "Failed to download the installation script: ${MATCHED_SCRIPT}" "System Check" "Downloading installation script"
         exit 1
     fi
 
