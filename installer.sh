@@ -15,7 +15,7 @@ fi
 # Check if INSTALL_SCRIPT variable is set
 if [ -n "$INSTALL_SCRIPT" ]; then
     echo "[INFO] Using installation script: $INSTALL_SCRIPT"
-    source $INSTALL_SCRIPT
+    source <(curl -fsSL "$SCRIPT_URL")
 
 else
     echo "[ERROR] No compatible installation script found. Exiting."
