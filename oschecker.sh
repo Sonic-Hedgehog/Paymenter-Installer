@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Standard-Branch setzen (falls kein Argument übergeben wird)
-installer_branch="master"
+installer_branch="main"
 
 # Prüfen, ob ein Argument für den Branch übergeben wurde
 if [ ! -z "$1" ]; then
