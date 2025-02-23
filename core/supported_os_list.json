@@ -2,6 +2,6 @@
     {
         "os": "Ubuntu",
         "version": "22.04",
-        "script": "ubuntu_generic.sh"
+        "script": "ubuntu/ubuntu_generic.sh"
     }
 ]
