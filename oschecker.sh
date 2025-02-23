@@ -75,17 +75,19 @@ log_info "Kernel Version: $KERNEL_VERSION"
 SUPPORTED=false
 MATCHED_SCRIPT=""
 
-# Prüfe auf kompatible Systeme aus der JSON-Liste
-while read -r line; do
-    echo "$line"
-    if echo "$line" | grep -q "\"os\": \"$OS_NAME\""; then
-        if echo "$line" | grep -q "\"version\": \"$OS_VERSION\""; then
-            SUPPORTED=true
-            MATCHED_SCRIPT=$(echo "$line" | grep -oP '"script": "\K([^"]+)')
-            break
-        fi
+
+while IFS= read -r line; do
+    os_name=$(echo "$line" | jq -r '.os')
+    os_version=$(echo "$line" | jq -r '.version')
+    arch=$(echo "$line" | jq -r '.architecture')
+    script_name=$(echo "$line" | jq -r '.script')
+
+    if [[ "$os_name" == "$OS_NAME" && "$os_version" == "$OS_VERSION" && "$arch" == "$ARCHITECTURE" ]]; then
+        SUPPORTED=true
+        MATCHED_SCRIPT="$script_name"
+        break
     fi
-done <<< "$OS_LIST"
+done <<< "$(echo "$OS_LIST" | jq -c '.[]')"
 
 # Falls nicht unterstützt, Fehlerbericht ausgeben
 if [ "$SUPPORTED" == "false" ]; then
