@@ -48,11 +48,11 @@ fi
 REPO_URL="https://raw.githubusercontent.com/Sonic-Hedgehog/paymenter-installer/$installer_branch"
 
 # Farbgenerator & Fehlerreporter direkt ausführen (ohne Speicherung)
-source <(curl -fsSL "$REPO_URL/color-generator.sh")
-source <(curl -fsSL "$REPO_URL/error-reporter.sh")
+source <(curl -fsSL "$REPO_URL/core/color-generator.sh")
+source <(curl -fsSL "$REPO_URL/core/error-reporter.sh")
 
 # Lade die Liste unterstützter Betriebssysteme direkt
-OS_LIST=$(curl -fsSL "$REPO_URL/supported_os_list.json")
+OS_LIST=$(curl -fsSL "$REPO_URL/core/supported_os_list.json")
 
 if [ -z "$OS_LIST" ]; then
     log_error_report "Failed to download the supported OS list." "System Check" "Download OS list"
@@ -94,12 +94,12 @@ if [ "$SUPPORTED" == "false" ]; then
     log_error_report "Your system ($OS_NAME $OS_VERSION) is not supported." "System Check" "Check system compatibility"
     exit 1
 else
-    log_success "The system is compatible! Running the installation script..."
+    log_success "Your OS is compatible!"
 fi
 
 # Falls ein passendes Installationsskript existiert, direkt ausführen
 if [ -n "$MATCHED_SCRIPT" ]; then
-    SCRIPT_URL="$REPO_URL/install_scripts/$MATCHED_SCRIPT"
+    SCRIPT_URL="$REPO_URL/os_scripts/$MATCHED_SCRIPT"
     echo -e "\e[34m[INFO]\e[0m Running installation script from: $SCRIPT_URL"
 
     INSTALL_SCRIPT=$(curl -fsSL "$SCRIPT_URL")
@@ -110,8 +110,8 @@ if [ -n "$MATCHED_SCRIPT" ]; then
         exit 1
     fi
 
-    bash -c "$INSTALL_SCRIPT"
-    echo "test"
+    exit 0
+
 
 else
     log_error_report "No installation script found for $OS_NAME $OS_VERSION." "Script Find" "Find matching script"
