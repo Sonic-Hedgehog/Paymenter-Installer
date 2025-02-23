@@ -110,7 +110,7 @@ if [ -n "$MATCHED_SCRIPT" ]; then
         exit 1
     fi
 
-    exit 0
+    return 0
 
 
 else
