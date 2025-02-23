@@ -13,5 +13,10 @@
         "os": "Debian",
         "version": "10",
         "script": "debian_10_install.sh"
+    },
+    {
+        "os": "Ubuntu",
+        "version": "22.04",
+        "script": "install-ubuntu-22.04.sh"
     }
 ]
