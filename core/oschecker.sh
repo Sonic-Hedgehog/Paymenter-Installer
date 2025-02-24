@@ -97,10 +97,10 @@ else
     log_success "Your OS is compatible!"
 fi
 
-# Falls ein passendes Installationsskript existiert, direkt ausführen
+# Falls ein passendes Installationsskript existiert download prüfen
 if [ -n "$MATCHED_SCRIPT" ]; then
     SCRIPT_URL="$REPO_URL/os_scripts/$MATCHED_SCRIPT"
-    echo -e "\e[34m[INFO]\e[0m Running installation script from: $SCRIPT_URL"
+    echo -e "\e[34m[INFO]\e[0m Get installation script from: $SCRIPT_URL"
 
     INSTALL_SCRIPT=$(curl -fsSL "$SCRIPT_URL")
 
