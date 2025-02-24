@@ -6,6 +6,7 @@ INSTALL_SCRIPT_URL="$REPO_URL//install_node_npm.sh"
 COLOR_SCRIPT_URL="$REPO_URL/core/color_generator.sh"
 
 # Load color generator
+echo $COLOR_SCRIPT_URL
 source <(curl -fsSL "$COLOR_SCRIPT_URL")
 
 # Fetch the supported Node.js version from JSON
