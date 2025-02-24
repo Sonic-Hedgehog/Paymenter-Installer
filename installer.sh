@@ -2,61 +2,22 @@
 
 # Define the repository URL
 REPO_URL="https://raw.githubusercontent.com/Sonic-Hedgehog/Paymenter-Installer/main"
-INSTALL_SCRIPT_URL="$REPO_URL/core/install_node_npm.sh"
 COLOR_SCRIPT_URL="$REPO_URL/core/color_generator.sh"
+OS_CHECKER_URL="$REPO_URL/core/os_checker.sh"
 
 # Load color generator
-source <(curl -fsSL "$COLOR_SCRIPT_URL")
-
-# Fetch the supported Node.js version from JSON
-SUPPORTED_VERSION=$(curl -fsSL "$REPO_URL/core/supported_nodejs_version.json" | jq -r '.version')
-
-# Check if jq is installed
-if ! command -v jq &> /dev/null; then
-    echo -e "${RED}[ERROR]${NC} 'jq' is required but not installed. Please install it first."
+if source <(curl -fsSL "$COLOR_SCRIPT_URL"); then
+    log_info "Color generator loaded successfully."
+else
+    echo -e "\033[0;31m[ERROR]\033[0m Failed to load color generator. Exiting."
     exit 1
 fi
 
-# Check if Node.js is installed
-if ! command -v node &> /dev/null; then
-    echo -e "${RED}[ERROR]${NC} Node.js is not installed. Please install it first."
-    read -p "Would you like to install Node.js and npm now? (y/n): " choice
-    if [[ "$choice" == "y" ]]; then
-        source <(curl -fsSL "$INSTALL_SCRIPT_URL")
-    else
-        exit 1
-    fi
-fi
-
-# Get installed Node.js version
-INSTALLED_NODE_VERSION=$(node -v | sed 's/v//')
-
-# Compare Node.js versions
-if [[ "${INSTALLED_NODE_VERSION%%.*}" -ge "${SUPPORTED_VERSION}" ]]; then
-    echo -e "${GREEN}[INFO]${NC} Node.js version $INSTALLED_NODE_VERSION is supported."
+# Load and execute OS checker
+if source <(curl -fsSL "$OS_CHECKER_URL"); then
+    log_info "OS checked successfully."
 else
-    echo -e "${RED}[ERROR]${NC} Node.js version $INSTALLED_NODE_VERSION is not supported. Minimum required version is $SUPPORTED_VERSION."
-    read -p "Would you like to install the required version now? (y/n): " choice
-    if [[ "$choice" == "y" ]]; then
-        source <(curl -fsSL "$INSTALL_SCRIPT_URL")
-    else
-        exit 1
-    fi
+    log_error "Failed to load OS checker. Please check your network connection and try again."
+    exit 1
 fi
 
-# Check if npm is installed
-if ! command -v npm &> /dev/null; then
-    echo -e "${RED}[ERROR]${NC} npm is not installed. Please install it first."
-    read -p "Would you like to install npm now? (y/n): " choice
-    if [[ "$choice" == "y" ]]; then
-        source <(curl -fsSL "$INSTALL_SCRIPT_URL")
-    else
-        exit 1
-    fi
-fi
-
-# Get installed npm version
-INSTALLED_NPM_VERSION=$(npm -v)
-echo -e "${GREEN}[INFO]${NC} npm version $INSTALLED_NPM_VERSION is installed."
-
-exit 0
