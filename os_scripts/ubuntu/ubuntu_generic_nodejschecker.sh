@@ -3,7 +3,7 @@
 # Define the repository URL
 REPO_URL="https://raw.githubusercontent.com/Sonic-Hedgehog/Paymenter-Installer/main"
 INSTALL_SCRIPT_URL="$REPO_URL//install_node_npm.sh"
-COLOR_SCRIPT_URL="$REPO_URL/core/color_generator.sh"
+COLOR_SCRIPT_URL="$REPO_URL/core/color-generator.sh"
 
 # Load color generator
 echo $COLOR_SCRIPT_URL
